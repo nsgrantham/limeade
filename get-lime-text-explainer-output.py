@@ -1,3 +1,5 @@
+import json
+
 from lime.lime_text import LimeTextExplainer
 import numpy as np
 import sklearn
@@ -46,9 +48,21 @@ print(dir(exp))
 print(exp.class_names)
 print(exp.local_exp)
 print(exp.local_pred)
-print(exp.domain_mapper.map_exp_ids(exp.local_exp[1]))
+print(exp.predict_proba)
+print(exp.domain_mapper.indexed_string.raw_string())
 exp.save_to_file("text.html")
 
+text_data = exp.domain_mapper.indexed_string.raw_string()
+with open("text-data.txt", "w") as f:
+    f.write(text_data)
+
+local_exp = dict(exp.domain_mapper.map_exp_ids(exp.local_exp[1]))
+with open("local-exp.json", "w") as f:
+    json.dump(local_exp, f)
+
+predict_proba = dict(zip(exp.class_names, exp.predict_proba))
+with open("predict-proba.json", "w") as f:
+    json.dump(predict_proba, f)
 
 newsgroups_train = fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes'))
 newsgroups_test = fetch_20newsgroups(subset='test',remove=('headers', 'footers', 'quotes'))

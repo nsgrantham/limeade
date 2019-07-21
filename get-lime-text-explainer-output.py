@@ -44,24 +44,16 @@ tmp[0,vectorizer.vocabulary_['Host']] = 0
 print('Prediction removing some features:', rf.predict_proba(tmp)[0,1])
 print('Difference:', rf.predict_proba(tmp)[0,1] - rf.predict_proba(test_vectors[idx])[0,1])
 
-print(dir(exp))
-print(exp.class_names)
-print(exp.local_exp)
-print(exp.local_pred)
-print(exp.predict_proba)
-print(exp.domain_mapper.indexed_string.raw_string())
-exp.save_to_file("text.html")
-
 text_data = exp.domain_mapper.indexed_string.raw_string()
-with open("text-data.txt", "w") as f:
+with open("data/text-data.txt", "w") as f:
     f.write(text_data)
 
 local_exp = dict(exp.domain_mapper.map_exp_ids(exp.local_exp[1]))
-with open("local-exp.json", "w") as f:
+with open("data/local-exp.json", "w") as f:
     json.dump(local_exp, f)
 
 predict_proba = dict(zip(exp.class_names, exp.predict_proba))
-with open("predict-proba.json", "w") as f:
+with open("data/predict-proba.json", "w") as f:
     json.dump(predict_proba, f)
 
 newsgroups_train = fetch_20newsgroups(subset='train', remove=('headers', 'footers', 'quotes'))
@@ -75,6 +67,3 @@ c = make_pipeline(vectorizer, nb)
 explainer = LimeTextExplainer(class_names=class_names)
 idx = 1340
 exp = explainer.explain_instance(newsgroups_test.data[idx], c.predict_proba, num_features=6, top_labels=3)
-print(exp.available_labels())
-
-exp.save_to_file("text2.html")

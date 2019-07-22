@@ -30,7 +30,7 @@ c = make_pipeline(vectorizer, rf)
 explainer = LimeTextExplainer(class_names=class_names)
 
 idx = 83
-exp = explainer.explain_instance(newsgroups_test.data[idx], c.predict_proba, num_features=12)
+exp = explainer.explain_instance(newsgroups_test.data[idx], c.predict_proba, num_features=100)
 print('Document id: %d' % idx)
 print('Probability(christian) =', c.predict_proba([newsgroups_test.data[idx]])[0,1])
 print('True class: %s' % class_names[newsgroups_test.target[idx]])
@@ -47,6 +47,22 @@ print('Difference:', rf.predict_proba(tmp)[0,1] - rf.predict_proba(test_vectors[
 text_data = exp.domain_mapper.indexed_string.raw_string()
 with open("data/text-data.txt", "w") as f:
     f.write(text_data)
+
+print(exp.domain_mapper.indexed_string.inverse_vocab)
+print(exp.domain_mapper.indexed_string.num_words())
+print(exp.domain_mapper.indexed_string.positions)
+print(exp.domain_mapper.indexed_string.bow)
+words = []
+for id_, contrib_proba in exp.local_exp[1]:
+    word = {
+        "word": exp.domain_mapper.indexed_string.word(id_), 
+        "position": exp.domain_mapper.indexed_string.string_position(id_).tolist(), 
+        "contribProba": contrib_proba
+    }
+    words.append(word)
+
+with open("data/words-data.json", "w") as f:
+    json.dump(words, f)
 
 local_exp = [{"textWord": text_word, "contribProba": abs(contrib_proba), "className": class_names[int(contrib_proba > 0)]} for text_word, contrib_proba in exp.domain_mapper.map_exp_ids(exp.local_exp[1])]
 with open("data/local-exp.json", "w") as f:

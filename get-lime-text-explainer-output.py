@@ -48,7 +48,7 @@ text_data = exp.domain_mapper.indexed_string.raw_string()
 with open("data/text-data.txt", "w") as f:
     f.write(text_data)
 
-local_exp = [{"textWord": text_word, "contribProba": contrib_proba} for text_word, contrib_proba in exp.domain_mapper.map_exp_ids(exp.local_exp[1])]
+local_exp = [{"textWord": text_word, "contribProba": abs(contrib_proba), "className": class_names[int(contrib_proba > 0)]} for text_word, contrib_proba in exp.domain_mapper.map_exp_ids(exp.local_exp[1])]
 with open("data/local-exp.json", "w") as f:
     json.dump(local_exp, f)
 

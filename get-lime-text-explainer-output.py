@@ -52,7 +52,7 @@ local_exp = dict(exp.domain_mapper.map_exp_ids(exp.local_exp[1]))
 with open("data/local-exp.json", "w") as f:
     json.dump(local_exp, f)
 
-predict_proba = dict(zip(exp.class_names, exp.predict_proba))
+predict_proba = [{"className": class_name, "predictProba": predict_proba} for class_name, predict_proba in zip(exp.class_names, exp.predict_proba)]
 with open("data/predict-proba.json", "w") as f:
     json.dump(predict_proba, f)
 

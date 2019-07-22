@@ -11,6 +11,9 @@ var y = d3.scaleBand()
 
 var x = d3.scaleLinear()
           .range([0, width]);
+
+var color = d3.scaleOrdinal()
+              .range(["#37A3D6", "#FF9400"]);;
           
 // append the svg object to the body of the page
 // append a 'group' element to 'svg'
@@ -29,9 +32,9 @@ d3.json("data/predict-proba.json", function(data) {
   });
 
   // Scale the range of the data in the domains
-  //x.domain([0, d3.max(data, function(d){ return d.predictProba; })])
   x.domain([0, 1]);
   y.domain(data.map(function(d) { return d.className; }));
+  color.domain(data.map(function(d) { return d.className; }));
 
   // append the rectangles for the bar chart
   svg1.selectAll(".bar")
@@ -40,7 +43,8 @@ d3.json("data/predict-proba.json", function(data) {
       .attr("class", "bar")
       .attr("width", function(d) {return x(d.predictProba); } )
       .attr("y", function(d) { return y(d.className); })
-      .attr("height", y.bandwidth());
+      .attr("height", y.bandwidth())
+      .style("fill", function(d) { return color(d.className); });
 
   // add the x Axis
   svg1.append("g")

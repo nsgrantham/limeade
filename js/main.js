@@ -20,7 +20,7 @@ let x = scaleLinear()
 
 //let color = d3.scaleOrdinal()
 let color = scaleOrdinal()
-              .range(["#37A3D6", "#FF9400"]);;
+              .range(["#37A3D6", "#FF9400"]);
 
 // append the svg object to the body of the page
 // append a 'group' element to 'svg'
@@ -33,11 +33,12 @@ let svg1 = select("#area1").append("svg")
     .attr("transform", 
           "translate(" + margin.left + "," + margin.top + ")");
 
-json("data/predict-proba.json", function(data) {
+json("./data/predict-proba.json").then(function(data) {
   // format the data
   data.forEach(function(d) {
     d.predictProba = +d.predictProba;
   });
+
 
   // Scale the range of the data in the domains
   x.domain([0, 1]);

@@ -2,7 +2,7 @@
   "name": "limeade",
   "version": "0.1.0",
   "description": "Visualize LIME explanations with D3.js in Python",
-  "main": "src/main.js",
+  "main": "main.js",
   "scripts": {
     "build": "webpack --mode production",
     "watch": "webpack watch",

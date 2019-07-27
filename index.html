@@ -28,9 +28,13 @@
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
     d3.json('./data/predict-proba.json', function(d) {
-      d.predictProba = +d.predictProba;
+      return {
+        label: d.label,
+        group: d.group,
+        proba: +d.proba
+      };
     }).then(function(data) {
-      var predictProba = new limeade.BarChart(svg, data, height, width);
+      var classProba = new limeade.BarChart(svg, data, height, width);
     })
   </script>
 </body>

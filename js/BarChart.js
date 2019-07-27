@@ -16,18 +16,18 @@ class BarChart {
     
     // scale the range of the data in the domains
     x.domain([0, 1]);
-    y.domain(data.map(function(d) { return d.className; }));
-    color.domain(data.map(function(d) { return d.className; }));
+    y.domain(data.map(function(d) { return d.label; }));
+    color.domain(data.map(function(d) { return d.group; }));
     
     // append the rectangles for the bar chart
     svg.selectAll(".bar")
         .data(data)
       .enter().append("rect")
         .attr("class", "bar")
-        .attr("width", function(d) {return x(d.predictProba); } )
-        .attr("y", function(d) { return y(d.className); })
+        .attr("width", function(d) {return x(d.proba); } )
+        .attr("y", function(d) { return y(d.label); })
         .attr("height", y.bandwidth())
-        .style("fill", function(d) { return color(d.className); });
+        .style("fill", function(d) { return color(d.group); });
     
     // add the x axis
     svg.append("g")

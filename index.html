@@ -6,6 +6,7 @@
   <link rel="shortcut icon" href="">
   <title>Limeade Viz</title>
   <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+  <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
   <script src="./bundle.js"></script>
 </head>
 
@@ -26,7 +27,11 @@
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
-    var predictProba = new limeade.BarChart(svg, height, width);
+    d3.json('./data/predict-proba.json', function(d) {
+      d.predictProba = +d.predictProba;
+    }).then(function(data) {
+      var predictProba = new limeade.BarChart(svg, data, height, width);
+    })
   </script>
 </body>
 </html>

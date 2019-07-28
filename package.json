@@ -1,0 +1,33 @@
+{
+  "name": "limeade",
+  "version": "0.1.0",
+  "description": "Visualize LIME explanations with D3.js in Python",
+  "main": "main.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "watch": "webpack watch",
+    "start": "webpack --mode development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nsgrantham/limeade.git"
+  },
+  "author": "Neal Grantham <neal@nsgrantham.com> (https://nsgrantham.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nsgrantham/limeade/issues"
+  },
+  "homepage": "https://github.com/nsgrantham/limeade#readme",
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.36.1",
+    "webpack-cli": "^3.3.6"
+  },
+  "dependencies": {
+    "d3-scale": "^3.0.0",
+    "d3-axis": "^1.0.12"
+  }
+}

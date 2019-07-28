@@ -5,13 +5,55 @@
   <meta charset="utf-8">
   <link rel="shortcut icon" href="">
   <title>Limeade Viz</title>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3-selection.v1.min.js"></script>
+  <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
+  <script src="./bundle.js"></script>
 </head>
 
 <body>
-  <div id="area1"></div>
-  <div id="area2"></div>
-
-  <script src="js/bars.js"></script>
+  <div id="limeade"></div>
+  <script>
+    // set the dimensions of the graph
+    var margin = {top: 20, right: 20, bottom: 30, left: 60},
+        width = 960 - margin.left - margin.right,
+        height = 240 - margin.top - margin.bottom;
+    
+    // create 'svg' and append a 'group' element to it
+    // moves the 'group' element to the top left margin
+    var svg1 = d3.select('#limeade')
+      .append('svg')
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    d3.json('./data/predict-proba.json', function(d) {
+      return {
+        label: d.label,
+        group: d.group,
+        proba: +d.proba
+      };
+    }).then(function(data) {
+      var classProba = new limeade.BarChart(svg1, data, height, width);
+    })
+    
+    var svg2 = d3.select('#limeade')
+      .append('svg')
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+    d3.json('./data/local-exp.json', function(d) {
+      return {
+        label: d.label,
+        group: d.group,
+        proba: +d.proba
+      };
+    }).then(function(data) {
+      var wordProba = new limeade.BarChart(svg2, data, height, width);
+    })
+    
+  </script>
 </body>
 </html>

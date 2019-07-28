@@ -105,3 +105,6 @@ venv.bak/
 
 # directory of data files
 data/
+
+# npm
+node_modules/

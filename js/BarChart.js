@@ -39,6 +39,12 @@ class BarChart {
         .call(axisLeft(y));
     
   }
+
+  draw() {
+    document.getElementById('update').addEventListener('click', () => {
+      console.log('pressed');
+    })
+  }
 }
 
 export default BarChart;

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <!--<button id='update'>Click me</button>-->
+  <button class='bar-data'>Click me</button>
   <div class='predict-proba'></div>
   <div class='local-exp'></div>
   <script>
@@ -27,6 +27,9 @@
         element: document.querySelector('.predict-proba'), 
         data: data
       });
+      d3.select('button.bar-data').on('click', function() {
+        predictProba.setData(data.reverse());
+      });
     });
     
     d3.json('./data/local-exp.json', function(d) {
@@ -41,7 +44,7 @@
         data: data
       });
     });
-    
+
   </script>
 </body>
 </html>

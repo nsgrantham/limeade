@@ -61,11 +61,10 @@ class BarChart {
     
   }
 
-  //drawButton() {
-  //  document.getElementById('update').addEventListener('click', () => {
-  //    console.log('pressed');
-  //  })
-  //}
+  setData(data) {
+    this.data = data;
+    this.draw()
+  }
 }
 
 export default BarChart;

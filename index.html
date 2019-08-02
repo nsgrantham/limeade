@@ -1,51 +1,33 @@
 <!doctype html>
 
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="utf-8">
-  <link rel="shortcut icon" href="">
+  <meta charset='utf-8'>
+  <link rel='shortcut icon' href=''>
   <title>Limeade Viz</title>
-  <script src="https://d3js.org/d3-selection.v1.min.js"></script>
-  <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
-  <script src="./bundle.js"></script>
+  <script src='https://d3js.org/d3-selection.v1.min.js'></script>
+  <script src='https://d3js.org/d3-fetch.v1.min.js'></script>
+  <script src='./bundle.js'></script>
 </head>
 
 <body>
-  <div id="limeade">
-    <button id="update">Click me</button>
-  </div>
+  <!--<button id='update'>Click me</button>-->
+  <div class='predict-proba'></div>
+  <div class='local-exp'></div>
   <script>
-    // set the dimensions of the graph
-    var margin = {top: 20, right: 20, bottom: 30, left: 60},
-        width = 960 - margin.left - margin.right,
-        height = 240 - margin.top - margin.bottom;
-    
-    // create 'svg' and append a 'group' element to it
-    // moves the 'group' element to the top left margin
-    var svg1 = d3.select('#limeade')
-      .append('svg')
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    
+
     d3.json('./data/predict-proba.json', function(d) {
       return {
         label: d.label,
         group: d.group,
         proba: +d.proba
       };
-    }).then(function(data) {
-      var classProba = new limeade.BarChart(svg1, data, height, width);
-      classProba.draw()
-    })
-    
-    var svg2 = d3.select('#limeade')
-      .append('svg')
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    }).then(data => {
+      var predictProba = new limeade.BarChart({
+        element: document.querySelector('.predict-proba'), 
+        data: data
+      });
+    });
     
     d3.json('./data/local-exp.json', function(d) {
       return {
@@ -53,9 +35,12 @@
         group: d.group,
         proba: +d.proba
       };
-    }).then(function(data) {
-      var wordProba = new limeade.BarChart(svg2, data, height, width);
-    })
+    }).then(data => {
+      var localExp = new limeade.BarChart({
+        element: document.querySelector('.local-exp'),
+        data: data
+      });
+    });
     
   </script>
 </body>

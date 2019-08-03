@@ -1,6 +1,7 @@
 import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { select } from 'd3-selection';
+import { runInThisContext } from 'vm';
 
 class BarChart {
   constructor(opts) {
@@ -15,50 +16,52 @@ class BarChart {
     this.width = 960 - this.margin.left - this.margin.right;
     this.height = 240 - this.margin.top - this.margin.bottom;
 
-    // set up parent element and SVG
     this.element.innerHTML = '';
-    const svg = select(this.element)
+    this.plot = select(this.element)
       .append('svg')
         .attr('width', this.width + this.margin.left + this.margin.right)
         .attr('height', this.height + this.margin.top + this.margin.bottom)
       .append('g')
         .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`);
 
-    // set the ranges
-    let y = scaleBand()
+    this.createScales();
+    this.addAxes();
+    this.addBars();
+  }
+
+  createScales() {
+    this.yScale = scaleBand()
+        .domain(this.data.map(d => d.label))
         .range([this.height, 0])
         .padding(0.1);
     
-    let x = scaleLinear()
+    this.xScale = scaleLinear()
+        .domain([0, 1])
         .range([0, this.width]);
     
-    let color = scaleOrdinal()
+    this.colorScale = scaleOrdinal()
+        .domain(this.data.map(d => d.group))
         .range(['#37A3D6', '#FF9400']);
-    
-    // scale the range of the data in the domains
-    x.domain([0, 1]);
-    y.domain(this.data.map(function(d) { return d.label; }));
-    color.domain(this.data.map(function(d) { return d.group; }));
-    
-    // set up parent element and SVG
-    svg.selectAll('.bar')
+  }    
+  
+  addBars() {
+    this.plot.selectAll('.bar')
         .data(this.data)
       .enter().append('rect')
         .attr('class', 'bar')
-        .attr('width', function(d) {return x(d.proba); } )
-        .attr('y', function(d) { return y(d.label); })
-        .attr('height', y.bandwidth())
-        .style('fill', function(d) { return color(d.group); });
-    
-    // add the x axis
-    svg.append('g')
+        .attr('width', d => this.xScale(d.proba))
+        .attr('y', d => this.yScale(d.label))
+        .attr('height', this.yScale.bandwidth())
+        .style('fill', d => this.colorScale(d.group));
+  }
+
+  addAxes() {
+    this.plot.append('g')
         .attr('transform', `translate(0, ${this.height})`)
-        .call(axisBottom(x));
+        .call(axisBottom(this.xScale));
     
-    // add the y axis
-    svg.append('g')
-        .call(axisLeft(y));
-    
+    this.plot.append('g')
+        .call(axisLeft(this.yScale));
   }
 
   setData(data) {

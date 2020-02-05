@@ -1,7 +1,7 @@
 import { scaleBand, scaleLinear, scaleOrdinal } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { select } from 'd3-selection';
-import { runInThisContext } from 'vm';
+import { transition } from 'd3-transition';
 
 class BarChart {
   constructor(opts) {
@@ -55,6 +55,22 @@ class BarChart {
         .style('fill', d => this.colorScale(d.group));
   }
 
+  updateBars() {
+    const t = transition()
+      duration(750);
+
+    let bar = this.plot.selectAll('g')
+      .data(this.data);
+
+    bar
+      .exit()
+        .remove();
+
+    bar
+      .transition(t)
+      .attr('transform', (d, i) => `translate(${i * (BAR_WIDTH + BAR_GAP)},${y(d)})`);
+  }
+
   addAxes() {
     this.plot.append('g')
         .attr('transform', `translate(0, ${this.height})`)
@@ -66,7 +82,7 @@ class BarChart {
 
   setData(data) {
     this.data = data;
-    this.draw()
+    this.draw();
   }
 }
 
